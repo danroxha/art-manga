@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaft/layout"
+       layout:decorate="~{layout.html}">
+
+<section layout:fragment="content">
+    <div th:if="${message != null}" th:text="${message}" th:class="${hasErrors != null && hasErrors == false } ? 'alert alert-primary' : 'alert alert-danger'">
+    </div>
+    <form th:action="@{/manga/adicionar}" method="POST" th:object="${manga}">
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group mb-3">
+            <label for="title"> Titulo:</label>
+            <input th:field="*{title}" id="title" class="form-control" type="text" required />
+            <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="title"> Capítulos:</label>
+            <input th:field="*{chapters}" id="chapters" class="form-control" type="number" min="0" step="1" required />
+            <span class="text-danger" th:if="${#fields.hasErrors('chapters')}" th:errors="*{chapters}"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label> Editora</label>
+            <select class="form-select" th:field="*{status}">
+                <option th:each="publisher : ${publishers}"  th:value="${publisher.id}" th:text="${publisher}" />
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label> Status</label>
+            <select class="form-select" th:field="*{status}">
+                <option th:each="st : ${status}"  th:value="${st.id}" th:text="${st}" />
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label> Autor(s)</label>
+            <div th:each="author: ${authors}">
+                <i th:text="${author}"></i>
+                <input   type="checkbox" th:value="${author.id}" name="authors" />
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label> Demografia</label>
+            <select class="form-select" th:field="*{demography}">
+                <option th:each="demography : ${demographics}"  th:value="${demography.id}" th:text="${demography}" />
+            </select>
+        </div>
+
+        <div class="form-group mb-3">
+            <label> Genero(s)</label>
+            <div th:each="genre: ${genres}">
+                <i th:text="${genre}"></i>
+                <input   type="checkbox" th:value="${genre.id}" name="genres" />
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="synopsis"> Synopsis</label>
+            <textarea th:field="*{synopsis}" id="synopsis" class="form-control" type="text" required >
+
+            </textarea>
+            <span class="text-danger" th:if="${#fields.hasErrors('synopsis')}" th:errors="*{synopsis}"></span>
+        </div>
+
+        <button class="btn btn-primary" type="submit" th:text="${manga.id == null} ? 'Adicionar' : 'Atualizar'">
+        </button>
+
+    </form>
+</section>
+</html>
