@@ -3,6 +3,8 @@ package com.art.manga.entities;
 import javax.persistence.*;
 import java.util.List;
 
+import static com.art.manga.controllers.MangaController.FOLDER_COVER;
+
 @Entity
 public class Manga {
 
@@ -17,7 +19,7 @@ public class Manga {
   private String cover;
   private Integer chapters;
 
-  @OneToMany
+  @ManyToMany
   private List<Author> authors;
 
   @ManyToOne
@@ -29,8 +31,15 @@ public class Manga {
   @ManyToOne
   private PublishingCompany publishingCompany;
 
-  @OneToMany
+  @ManyToMany
   private List<Genre> genres;
+
+  @Transient
+  public String getCoverURL() {
+    if (cover == null || id == null) return null;
+
+    return String.format("%s/%s/%s", FOLDER_COVER, id, cover);
+  }
 
   public Long getId() {
     return id;
