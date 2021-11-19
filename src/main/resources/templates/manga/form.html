@@ -6,8 +6,15 @@
 <section layout:fragment="content">
     <div th:if="${message != null}" th:text="${message}" th:class="${hasErrors != null && hasErrors == false } ? 'alert alert-primary' : 'alert alert-danger'">
     </div>
-    <form th:action="@{/manga/adicionar}" method="POST" th:object="${manga}">
+    <form
+            th:action="@{/manga/adicionar}"
+            th:object="${manga}"
+            method="POST"
+            enctype="multipart/form-data"
+    >
         <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{cover}" />
+
         <div class="form-group mb-3">
             <label for="title"> Titulo:</label>
             <input th:field="*{title}" id="title" class="form-control" type="text" required />
@@ -22,7 +29,7 @@
 
         <div class="form-group mb-3">
             <label> Editora</label>
-            <select class="form-select" th:field="*{status}">
+            <select class="form-select" th:field="*{publishingCompany}">
                 <option th:each="publisher : ${publishers}"  th:value="${publisher.id}" th:text="${publisher}" />
             </select>
         </div>
@@ -38,7 +45,7 @@
             <label> Autor(s)</label>
             <div th:each="author: ${authors}">
                 <i th:text="${author}"></i>
-                <input   type="checkbox" th:value="${author.id}" name="authors" />
+                <input  type="checkbox" th:value="${author.id}" th:field="*{authors}" />
             </div>
         </div>
 
@@ -49,12 +56,51 @@
             </select>
         </div>
 
-        <div class="form-group mb-3">
-            <label> Genero(s)</label>
-            <div th:each="genre: ${genres}">
-                <i th:text="${genre}"></i>
-                <input   type="checkbox" th:value="${genre.id}" name="genres" />
+        <div class="form-group">
+            <label> Gênero(s)</label>
+            <div class="row">
+                <div th:each="genre: ${genres}" class="form-check form-switch col">
+                    <input class="form-check-input" th:value="${genre.id}" th:field="*{genres}" type="checkbox" id="flexSwitchCheckChecked" />
+                    <label th:text="${genre}" class="form-check-label" for="flexSwitchCheckChecked"/>
+                </div>
             </div>
+            <!--
+            <span class="btn btn-secondary btn-sm m-1" th:each="genre: ${genres}">
+                <i th:text="${genre}" />
+                <input type="checkbox" th:value="${genre.id}" th:field="*{genres}" />
+            </span>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="genre: ${genres}">
+                        <dt><i th:text="${genre}"></i></dt>
+                        <dt><input type="checkbox" th:value="${genre.id}" th:field="*{genres}" /></dt>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Seleção</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="genre: ${genres}">
+                        <th scope="row">#</th>
+                        <td><i th:text="${genre}" /></td>
+                        <td><input type="checkbox" th:value="${genre.id}" th:field="*{genres}" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            -->
         </div>
 
         <div class="form-group mb-3">
@@ -63,6 +109,11 @@
 
             </textarea>
             <span class="text-danger" th:if="${#fields.hasErrors('synopsis')}" th:errors="*{synopsis}"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label>Capa </label>
+            <input type="file" name="image" accept="image/png, image/jpeg" />
         </div>
 
         <button class="btn btn-primary" type="submit" th:text="${manga.id == null} ? 'Adicionar' : 'Atualizar'">

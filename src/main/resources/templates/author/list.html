@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaft/layout"
+      layout:decorate="~{layout.html}"
+>
+
+<section layout:fragment="content">
+  <div th:if="${#lists.isEmpty(authors)}" class="alert alert-primary">
+    <span> Não há autores cadastradas</span>
+  </div>
+
+  <div th:if="${message != null}" class="alert alert-primary">
+    <span th:text="${message}"></span>
+  </div>
+
+  <table th:if="${not #lists.isEmpty(authors)}" class="table table-striped">
+    <h2>Autor(s)</h2>
+    <thead>
+    <tr>
+      <td>ID</td>
+      <td>Nome</td>
+      <td>Opção</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="author : ${authors}">
+      <td th:text="${author.id}"></td>
+      <td th:text="${author.name}" width="65%"></td>
+      <td>
+        <a class="btn btn-primary" th:href="@{/autor/editar(id=${author.id})}"> Editar</a>
+        <a class="btn btn-danger" th:href="@{/autor/excluir(id=${author.id})}"> Excluir</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</section>
+</html>

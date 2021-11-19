@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaft/layout"
+      layout:decorate="~{layout.html}"
+>
+
+<section layout:fragment="content">
+    <div th:if="${#lists.isEmpty(mangas)}" class="alert alert-primary">
+        <span> Não há mangás cadastradas</span>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-primary">
+        <span th:text="${message}"></span>
+    </div>
+    <div th:if="${not #lists.isEmpty(mangas)}">
+        <form id="search-form">
+            <div class="form-group mb-3">
+                <label> Nome </label>
+                <input class="form-control" type="text" name="name" placeholder="Pesquisar mangá"/>
+            </div>
+            <button id="search-button"class="btn btn-primary" type="submit">Pesquisar</button>
+        </form>
+    </div>
+
+    <h2>Mangás</h2>
+    <section id="manga-list" th:if="${not #lists.isEmpty(mangas)}">
+
+        <a th:each="manga : ${mangas}" th:href="|/manga/${manga.id}|" class="card mb-3" style="text-decoration: none; color: black;">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img class="bd-placeholder-img" width="100%" height="250" style="object-fit: cover;" th:src="|@{~/}${manga.coverURL}|" th:alt="|capa ${manga.title}|"/>
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${manga.title}" />
+                        <p class="card-text" th:text="${#strings.abbreviate(manga.synopsis, 150)}" />
+                        <span class="card-text btn btn-primary btn-sm m-1"
+                              th:each="genre, p: ${manga.genres}"
+                              th:unless="${p.index > 2}"
+                              th:text="${genre}"
+                        />
+                    </div>
+                </div>
+            </div>
+        </a>
+    </section>
+</section>
+<section id="script" layout:fragment="script" class="script">
+    <script defer>
+        let searchForm = document.querySelector('#search-form');
+        searchForm.addEventListener('submit', e => {
+            e.preventDefault();
+            document.querySelector('.not-found-error')?.remove();
+
+            const mangaName = e.target.querySelector('input').value
+            handleSearchRequest(stringToBase64(mangaName));
+        });
+
+        async function handleSearchRequest(mangaName) {
+            let mangas = await fetch(`http://${window.location.host}/manga/json?title=${mangaName}`)
+            .then(data => data.json());
+
+            const list = document.querySelector('#manga-list');
+
+            const notFoundMangas = `
+                <div class="alert alert-primary not-found-error">
+                    <span> Nenhum manga encontrado</span>
+                </div>
+            `;
+
+            list.innerHTML = '';
+
+            if(!mangas.length) {
+                const content = document.querySelector('#content');
+                content.insertAdjacentHTML('afterbegin', notFoundMangas)
+                return;
+            }
+
+            list.innerHTML = mangas.map(manga => `
+                <a href="/manga/${manga.id}" class="card mb-3" style="text-decoration: none; color: black;">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img class="bd-placeholder-img" width="100%" height="250" style="object-fit: cover;" src="/${manga.coverURL}" alt="capa ${manga.title}"/>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title" >${manga.title}</h5>
+                                <p class="card-text">
+                                    ${manga.synopsis.substring(0, 150)}...
+                                <p/>
+                                ${manga.genres.map(genre => `<span class="card-text btn btn-primary btn-sm m-1">${genre.name}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        function stringToBase64(string ) {
+            return btoa(unescape(encodeURIComponent(string)));
+        }
+    </script>
+</section>
+</html>

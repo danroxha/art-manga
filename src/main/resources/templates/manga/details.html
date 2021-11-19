@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaft/layout"
+      layout:decorate="~{layout.html}"
+>
+
+<section layout:fragment="content">
+    <section class="card">
+
+        <div class="card-header d-flex justify-content-between">
+            <h1 th:text="${manga.title}" />
+            <section>
+                <a class="btn btn-info btn-lg" th:href="@{/manga/editar(id=${manga.id})}" th:text="Editar"/>
+                <a class="btn btn-danger btn-lg" th:href="@{/manga/excluir(id=${manga.id})}" th:text="Excluir"/>
+            </section>
+        </div>
+        <section class="row card-body" style="display: flex;">
+            <section class="col-4">
+                <img  class="img-fluid" th:src="|/${manga.coverURL}|" th:alt="|Capa ${manga.title}|" style="max-width=350px;"/>
+            </section>
+            <section class="col">
+                <ul>
+                    <li><strong>Status</strong>: [[${manga.status}]]</li>
+                    <li><strong>Capitulos</strong>: [[${manga.chapters}]]</li>
+                    <li><strong>Demografia</strong>: [[${manga.demography}]]</li>
+                    <li><strong>Editora</strong>: [[${manga.publishingCompany}]]</li>
+                    <li><strong>Autor(s)</strong>: <span  class="btn btn-primary btn-sm m-1" th:each="author : ${manga.authors}">[[${author}]]</span></li>
+                    <li><strong>Genero(s)</strong>: <span class="btn btn-primary btn-sm m-1" th:each="genre : ${manga.genres}">[[${genre}]]</span></li>
+                </ul>
+            </section>
+        </section>
+        <div class="card-footer">
+            <h2>Synopsi</h2>
+            <p th:text="${manga.synopsis}" />
+        </div>
+    </section>
+</section>
+<section layout:fragment="script">
+</section>
+</html>

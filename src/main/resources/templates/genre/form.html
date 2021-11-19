@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaft/layout"
+       layout:decorate="~{layout.html}">
+
+<section layout:fragment="content">
+    <h1>Adicionar Gênero</h1>
+    <div th:if="${message != null}" th:text="${message}" th:class="${hasErrors != null && hasErrors == false } ? 'alert alert-primary' : 'alert alert-danger'">
+    </div>
+    <form
+            th:action="@{/genero/adicionar}"
+            th:object="${genre}"
+            method="POST"
+    >
+        <input type="hidden" th:field="*{id}" />
+        <div class="form-group mb-3">
+            <label for="title"> Nome</label>
+            <input th:field="*{name}" id="title" class="form-control" type="text" required placeholder="Nome do gênero"/>
+            <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+        <button class="btn btn-primary" type="submit" th:text="${genre.id == null} ? 'Adicionar' : 'Atualizar'">
+        </button>
+    </form>
+</section>
+
+</html>
