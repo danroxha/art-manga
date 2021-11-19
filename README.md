@@ -1,13 +1,15 @@
 # Exercicio complementar MVC.
 
 ## Ferramentas:
-- Java 11
-- Maven
+- :pushpin: Java 11
+- :pushpin: Maven
+- :pushpin: MariaDB 10.7
 
-## Objetivo
+
+## :dart: Objetivo
 Exercício para fixação dos conceitos visto no curso de MVC.
 
-## Screenshot
+## :tv: Screenshot
 
 <p align="center">
     <img  width="350" src="screenshot/01.png" />
@@ -15,3 +17,13 @@ Exercício para fixação dos conceitos visto no curso de MVC.
     <img  width="350" src="screenshot/03.png" />
     <img  width="350" src="screenshot/04.png" />
 </p>
+
+
+## :cd: Rodar projeto:
+
+Na linha de comando:
+Use o ```mvnw``` para ambiente Linux e ```mvnw.cmd``` para Windows
+
+```
+./mvnw spring-boot:run
+```
