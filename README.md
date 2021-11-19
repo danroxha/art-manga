@@ -19,7 +19,7 @@ Exercício para fixação dos conceitos visto no curso de MVC.
 </p>
 
 
-## :cd: Rodar projeto:
+## :cd: Iniciar:
 
 Na linha de comando:
 Use o ```mvnw``` para ambiente Linux e ```mvnw.cmd``` para Windows
