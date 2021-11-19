@@ -25,4 +25,20 @@ public class GenreService {
   public List<Genre> listAllGenres() {
     return genreRepository.findAll();
   }
+
+  public Optional<Genre> deleteGenreById(Long id) {
+
+    var genreSaved = genreRepository.findById(id);
+
+    if(genreSaved.isEmpty()) {
+      return Optional.empty();
+    }
+    try {
+      genreRepository.deleteById(id);
+      return genreSaved;
+    }
+    catch (Exception e) {
+      return Optional.empty();
+    }
+  }
 }

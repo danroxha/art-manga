@@ -25,4 +25,20 @@ public class AuthorService {
   public List<Author> listAllAuthors() {
     return authorRepository.findAll();
   }
+
+  public Optional<Author> findAuthorById(Long id) {
+    return authorRepository.findById(id);
+  }
+
+  public Optional<Author> deleteAuthorById(Long id) {
+    var author = findAuthorById(id);
+
+    if(author.isEmpty()) {
+      return Optional.empty();
+    }
+
+    authorRepository.deleteById(id);
+
+    return author;
+  }
 }

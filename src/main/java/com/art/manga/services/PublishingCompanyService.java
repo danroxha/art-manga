@@ -25,4 +25,24 @@ public class PublishingCompanyService {
   public List<PublishingCompany> listAllPublishers() {
     return publishingCompanyRepository.findAll();
   }
+
+  public Optional<PublishingCompany> findPublisherById(Long id) {
+    return publishingCompanyRepository.findById(id);
+  }
+
+  public Optional<PublishingCompany> detetePublisherById(Long id) {
+    var publisher = publishingCompanyRepository.findById(id);
+
+    if(publisher.isEmpty()) {
+      return Optional.empty();
+    }
+
+    try {
+      publishingCompanyRepository.deleteById(id);
+      return publisher;
+    }
+    catch (Exception e) {
+      return Optional.empty();
+    }
+  }
 }
